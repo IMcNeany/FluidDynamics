@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PointData : MonoBehaviour {
 
-    float[] density;
-    float[] prevDensity;
-    Vector2[] velocity;
-    Vector2[] prevVelocity;
+    float density;
+    float prevDensity;
+    Vector2 velocity;
+    Vector2 prevVelocity;
     public List<float> densitySources = null;
     float diffusion;
 
@@ -25,7 +25,7 @@ public class PointData : MonoBehaviour {
 
         for(int i = 0; i < size; i++)
         {
-            density[i] += Time.deltaTime * densitySources[i];
+         //   density[i] += Time.deltaTime * densitySources[i];
         }
 
     }
@@ -39,51 +39,51 @@ public class PointData : MonoBehaviour {
             {
                 for(int j = 1; j<=n; j++)
                 {
-                    density[(i + (n + 2) * j)] = prevDensity[((i) + (n + 2) * j)] + a * (density[((i - 1) + (n + 2) * j)] + density[((i+1)+ (n+2) * j)] + density[(i) + (n+2) * (j-1) ]+ density[(i) + (n+2) *(j+1)])/(1+4 *a);
+                   // density[(i + (n + 2) * j)] = prevDensity[((i) + (n + 2) * j)] + a * (density[((i - 1) + (n + 2) * j)] + density[((i+1)+ (n+2) * j)] + density[(i) + (n+2) * (j-1) ]+ density[(i) + (n+2) *(j+1)])/(1+4 *a);
                 }
             }
-            setBoundaries(n, b, x);
+          //  setBoundaries(n, b, x);
         }
     }
     
-    public float GetDensity(int i)
+    public float GetDensity()
     {
-        return density[i];
+        return density;
     }
 
-    public float GetPreviousDensity(int i)
+    public float GetPreviousDensity()
     {
-        return prevDensity[i];
+        return prevDensity;
     }
 
-    public void SetPreviousDensity(int i, float prevD)
+    public void SetPreviousDensity( float prevD)
     {
-        prevDensity[i] = prevD;
+        prevDensity = prevD;
     }
 
-    public void SetDensity(int i, float dens)
+    public void SetDensity( float dens)
     {
-        prevDensity[i] = dens;
+        prevDensity = dens;
     }
 
-    public Vector2 GetVelocity(int i)
+    public Vector2 GetVelocity()
     {
-        return velocity[i];
+        return velocity;
     }
 
-    public Vector2 GetPreviousVelocity(int i)
+    public Vector2 GetPreviousVelocity()
     {
-        return prevVelocity[i];
+        return prevVelocity;
     }
 
-    public void SetPreviousVelocity(int i, Vector2 prevV)
+    public void SetPreviousVelocity( Vector2 prevV)
     {
-        prevVelocity[i] = prevV;
+        prevVelocity = prevV;
     }
 
-    public void SetVelocity(int i, Vector2 vel)
+    public void SetVelocity( Vector2 vel)
     {
-        prevVelocity[i] = vel;
+        prevVelocity = vel;
     }
 
     public float GetDensitySource(int i)
