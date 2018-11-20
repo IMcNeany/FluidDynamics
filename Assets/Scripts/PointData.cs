@@ -8,7 +8,9 @@ public class PointData : MonoBehaviour {
     float[] prevDensity;
     Vector2[] velocity;
     Vector2[] prevVelocity;
-    public List<Vector2> densitySources = null;
+    public List<float> densitySources = null;
+    float diffusion;
+
 
 
     // Use this for initialization
@@ -16,6 +18,33 @@ public class PointData : MonoBehaviour {
         
 
 	}
+
+    void AddSource(int n)
+    {
+        int size = (n+2) * (n+2);
+
+        for(int i = 0; i < size; i++)
+        {
+            density[i] += Time.deltaTime * densitySources[i];
+        }
+
+    }
+
+    void diffuse(int n, int b)
+    {
+        float a = Time.deltaTime * diffusion *  n * n;
+        for (int k = 0; k <20; k++)
+        {
+            for(int i = 0; i <= n; i++)
+            {
+                for(int j = 1; j<=n; j++)
+                {
+                    density[(i + (n + 2) * j)] = prevDensity[((i) + (n + 2) * j)] + a * (density[((i - 1) + (n + 2) * j)] + density[((i+1)+ (n+2) * j)] + density[(i) + (n+2) * (j-1) ]+ density[(i) + (n+2) *(j+1)])/(1+4 *a);
+                }
+            }
+            setBoundaries(n, b, x);
+        }
+    }
     
     public float GetDensity(int i)
     {
@@ -57,12 +86,12 @@ public class PointData : MonoBehaviour {
         prevVelocity[i] = vel;
     }
 
-    public Vector2 GetDensitySource(int i)
+    public float GetDensitySource(int i)
     {
         return densitySources[i];
     }
 
-    public void SetDensitySource(Vector2 source)
+    public void SetDensitySource(float source)
     {
         //take the 0. to get the touch on the square
         densitySources.Add(source);
