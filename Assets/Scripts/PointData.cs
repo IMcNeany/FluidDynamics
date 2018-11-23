@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PointData : MonoBehaviour {
 
-    float density;
+    public float density;
+    public float source;
     float prevDensity;
-    Vector2 velocity;
-    Vector2 prevVelocity;
+    public float verticalVelocity;
+    public float previousVerticalVelocity;
+    public float previousHorizontalVelocity;
+    public float horizontalVelocity;
     public List<float> densitySources = null;
     float diffusion;
 
@@ -66,24 +69,34 @@ public class PointData : MonoBehaviour {
         prevDensity = dens;
     }
 
-    public Vector2 GetVelocity()
+    public void SetSource(float s)
     {
-        return velocity;
+        source = s;
     }
 
-    public Vector2 GetPreviousVelocity()
+    public float GetSource()
     {
-        return prevVelocity;
+        return source;
     }
 
-    public void SetPreviousVelocity( Vector2 prevV)
+    public float GetHorizontalVelocity()
     {
-        prevVelocity = prevV;
+        return horizontalVelocity;
     }
 
-    public void SetVelocity( Vector2 vel)
+    public float GetVerticalVelocity()
     {
-        prevVelocity = vel;
+        return verticalVelocity;
+    }
+
+    public void SetVerticalVelocity( float vVel)
+    {
+        verticalVelocity = vVel;
+    }
+
+    public void SetHorizontalVelocity( float hVel)
+    {
+        horizontalVelocity = hVel;
     }
 
     public float GetDensitySource(int i)
