@@ -11,15 +11,18 @@ public class PointData : MonoBehaviour {
     public float previousVerticalVelocity;
     public float previousHorizontalVelocity;
     public float horizontalVelocity;
-    public List<float> densitySources = null;
+    public float densitySource = 0.0f;
     float diffusion;
-
+    Material material;
+    RenderTexture renderTex;
 
 
     // Use this for initialization
     void Start () {
-        
-
+        //need to create and assign a render texture..
+        material = gameObject.GetComponent<SpriteRenderer>().material;
+        renderTex = new RenderTexture(1,1, 16, RenderTextureFormat.ARGB32);
+        material.SetTexture("renderTex", renderTex);
 	}
 
     void AddSource(int n)
@@ -101,15 +104,20 @@ public class PointData : MonoBehaviour {
 
     public float GetDensitySource(int i)
     {
-        return densitySources[i];
+        return densitySource;
     }
 
     public void SetDensitySource(float source)
     {
         //take the 0. to get the touch on the square
-        densitySources.Add(source);
+        densitySource = source;
+       // gameObject.GetComponent<RenderTexture>().
         //densitySources.Add(source);
         Debug.Log("source" + source);
+        //renderTex
+
+        Color colour = new Color(1.0f, 0.0f, 0.0f, (source/100.0f));
+       // Color[] colourArray =
     }
 
     // Update is called once per frame

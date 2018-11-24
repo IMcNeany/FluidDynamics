@@ -25,7 +25,7 @@ public class Grid2D : MonoBehaviour {
                 if(hit.collider.gameObject.GetComponent<PointData>())
                 {
                     PointData point = hit.collider.gameObject.GetComponent<PointData>();
-                   // point.SetDensitySource(new Vector2(hit.point.x, hit.point.z));
+                   point.SetDensitySource(100.0f);
                     Debug.Log("mouse pos" + hit.point.x + hit.point.z);
 
                 }
@@ -55,6 +55,15 @@ public class Grid2D : MonoBehaviour {
                 
             }
         }
+    }
+
+    void Density(float source, int b, float diffusion)
+    {
+        AddSource(source);
+        //Swap()
+        Diffuse(b, diffusion);
+        //swap
+       // Advect
     }
 
     void AddSource(float source)
