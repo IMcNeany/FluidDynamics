@@ -14,15 +14,13 @@ public class PointData : MonoBehaviour {
     public float densitySource = 0.0f;
     float diffusion;
     Material material;
-    RenderTexture renderTex;
-
 
     // Use this for initialization
     void Start () {
         //need to create and assign a render texture..
         material = gameObject.GetComponent<SpriteRenderer>().material;
-        renderTex = new RenderTexture(1,1, 16, RenderTextureFormat.ARGB32);
-        material.SetTexture("renderTex", renderTex);
+        //  renderTex = new RenderTexture(1,1, 16, RenderTextureFormat.ARGB32);
+       
 	}
 
     void AddSource(int n)
@@ -116,8 +114,10 @@ public class PointData : MonoBehaviour {
         Debug.Log("source" + source);
         //renderTex
 
-        Color colour = new Color(1.0f, 0.0f, 0.0f, (source/100.0f));
-       // Color[] colourArray =
+        Color colour = new Color(1.0f, 0.0f, 0.0f, (50.0f));
+            //source/100.0f));
+
+        material.color = colour;
     }
 
     // Update is called once per frame
