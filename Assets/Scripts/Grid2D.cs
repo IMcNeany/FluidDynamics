@@ -5,7 +5,9 @@ using UnityEngine;
 public class Grid2D : MonoBehaviour {
     public int size;
     public GameObject pointData;
-    List<PointData> points;
+    public List<PointData> points = new List<PointData>();
+    int diffusionRate = 1;
+    int b = 2;
 	// Use this for initialization
 	void Start () {
         DrawGrid();
@@ -31,18 +33,10 @@ public class Grid2D : MonoBehaviour {
                 }
             }
         }
-    }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        for(int i = 0; i< size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-             //   Gizmos.DrawSphere(new Vector3(i, 0, j), 0.03f);
-            }
-        }
+
+        Diffuse(b, diffusionRate);
+
     }
 
     void DrawGrid()
@@ -51,19 +45,19 @@ public class Grid2D : MonoBehaviour {
         {
             for (int j = 0; j <= size; j++)
             {
-                Instantiate(pointData,new Vector3(i, 0,j), new Quaternion(1.0f,0,0,1));
-                
+                GameObject newPoint = Instantiate(pointData,new Vector3(i, 0,j), new Quaternion(1.0f,0,0,1));
+                points.Add(newPoint.GetComponent<PointData>());
             }
         }
     }
 
-    void Density(float source, int b, float diffusion)
+    void Density(int b, float diffusionRate)
     {
-        AddSource(source);
+       // AddSource(source);
         //Swap()
-        Diffuse(b, diffusion);
+        Diffuse(b, diffusionRate);
         //swap
-       // Advect
+        Advect(b);
     }
 
     void AddSource(float source)
@@ -78,7 +72,7 @@ public class Grid2D : MonoBehaviour {
     void Diffuse( int b, float diffusion)
     {
         float a = Time.deltaTime * diffusion * size * size;
-        LinearSolver( b, a, 1 + 4 * a);
+       // LinearSolver( b, a, 1 + 4 * a);
     }
 
     void LinearSolver(int b, float a, float c)
@@ -95,7 +89,8 @@ public class Grid2D : MonoBehaviour {
                 }
             }
 
-          //  SetBoundaryDensity(b); x vertical vel
+            //  SetBoundaryDensity(b); x vertical vel
+            SetBoundaryVerticalVelocity(b);
         }
     }
 
@@ -194,7 +189,6 @@ public class Grid2D : MonoBehaviour {
         points[((size + 1) + (size + 2) * (0))].previousHorizontalVelocity = 0.5f * (points[((size) + (size + 2) * (0))].previousHorizontalVelocity + points[((size + 1) + (size + 2) * (1))].previousHorizontalVelocity);
         points[((size + 1) + (size + 2) * (size + 1))].previousHorizontalVelocity = 0.5f * (points[(size + (size + 2) * (size + 1))].previousHorizontalVelocity + points[((size + 1) + (size + 2) * (size))].previousHorizontalVelocity);
     }
-
 
     void Advect( int b)
     {

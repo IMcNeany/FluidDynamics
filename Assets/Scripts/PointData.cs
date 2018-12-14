@@ -14,18 +14,15 @@ public class PointData : MonoBehaviour {
     public float densitySource = 0.0f;
     float diffusion;
     Material material;
-    RenderTexture renderTex;
-
 
     // Use this for initialization
     void Start () {
         //need to create and assign a render texture..
         material = gameObject.GetComponent<SpriteRenderer>().material;
-        renderTex = new RenderTexture(1,1, 16, RenderTextureFormat.ARGB32);
-        material.SetTexture("renderTex", renderTex);
+       
 	}
 
-    void AddSource(int n)
+    /*void AddSource(int n)
     {
         int size = (n+2) * (n+2);
 
@@ -34,7 +31,7 @@ public class PointData : MonoBehaviour {
          //   density[i] += Time.deltaTime * densitySources[i];
         }
 
-    }
+    }*/
 
     void diffuse(int n, int b)
     {
@@ -117,7 +114,10 @@ public class PointData : MonoBehaviour {
         //renderTex
 
         Color colour = new Color(1.0f, 0.0f, 0.0f, (source/100.0f));
-       // Color[] colourArray =
+           // //source/100.0f));
+
+        material.color = colour;
+      //  material.color.a(source / 100.0f);
     }
 
     // Update is called once per frame

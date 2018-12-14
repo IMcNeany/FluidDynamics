@@ -65,6 +65,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeda26c9c714c4040ae39e6505cedfe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  density: 0
+  source: 0
+  verticalVelocity: 0
+  previousVerticalVelocity: 0
+  previousHorizontalVelocity: 0
+  horizontalVelocity: 0
+  densitySource: 0
 --- !u!212 &212681818173153030
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -80,7 +87,7 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: a3a8d0c70ef9da24e8dbc8f309121ac5, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,7 +112,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.04, y: 0.04}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
