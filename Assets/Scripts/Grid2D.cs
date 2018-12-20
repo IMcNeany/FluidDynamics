@@ -34,9 +34,7 @@ public class Grid2D : MonoBehaviour {
             }
         }
 
-
-        Diffuse(b, diffusionRate);
-
+Diffuse(b, diffusionRate);
     }
 
     void DrawGrid()
@@ -45,9 +43,8 @@ public class Grid2D : MonoBehaviour {
         {
             for (int j = 0; j <= size; j++)
             {
-                GameObject newPoint = Instantiate(pointData,new Vector3(i, 0,j), new Quaternion(1.0f,0,0,1));
-                points.Add(newPoint.GetComponent<PointData>());
-            }
+GameObject newPoint = Instantiate(pointData,new Vector3(i, 0,j), new Quaternion(1.0f,0,0,1));
+                points.Add(newPoint.GetComponent<PointData>());            }
         }
     }
 

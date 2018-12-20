@@ -19,7 +19,6 @@ public class PointData : MonoBehaviour {
     void Start () {
         //need to create and assign a render texture..
         material = gameObject.GetComponent<SpriteRenderer>().material;
-       
 	}
 
     /*void AddSource(int n)
@@ -113,12 +112,11 @@ public class PointData : MonoBehaviour {
         Debug.Log("source" + source);
         //renderTex
 
-        Color colour = new Color(1.0f, 0.0f, 0.0f, (source/100.0f));
+ Color colour = new Color(1.0f, 0.0f, 0.0f, (source/100.0f));
            // //source/100.0f));
 
         material.color = colour;
-      //  material.color.a(source / 100.0f);
-    }
+      //  material.color.a(source / 100.0f);    }
 
     // Update is called once per frame
     void Update () {
