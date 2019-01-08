@@ -4,53 +4,53 @@ using UnityEngine;
 
 public class PointData : MonoBehaviour {
 
-    public float density;
-    public float source;
-    float prevDensity;
-    public float verticalVelocity;
+    public float density = 0.0f;
+    public float source = 0.0f;
+    float prevDensity = 0.0f;
+    public float verticalVelocity = 0.0f;
     public float previousVerticalVelocity;
-    public float previousHorizontalVelocity;
-    public float horizontalVelocity;
+    public float previousHorizontalVelocity = 0.0f;
+    public float horizontalVelocity = 0.0f;
     public float densitySource = 0.0f;
+    public int gridX;
+    public int gridY;
     float diffusion;
     Material material;
-
+    public List<PointData> surroundingPoints = new List<PointData>();
+    public List<PointData> pointsToDiffuse = new List<PointData>();
     // Use this for initialization
-    void Start () {
+    void Start() {
         //need to create and assign a render texture..
         material = gameObject.GetComponent<SpriteRenderer>().material;
-	}
-
-    /*void AddSource(int n)
-    {
-        int size = (n+2) * (n+2);
-
-        for(int i = 0; i < size; i++)
-        {
-         //   density[i] += Time.deltaTime * densitySources[i];
-        }
-
-    }*/
-
-    void diffuse(int n, int b)
-    {
-        float a = Time.deltaTime * diffusion *  n * n;
-        for (int k = 0; k <20; k++)
-        {
-            for(int i = 0; i <= n; i++)
-            {
-                for(int j = 1; j<=n; j++)
-                {
-                   // density[(i + (n + 2) * j)] = prevDensity[((i) + (n + 2) * j)] + a * (density[((i - 1) + (n + 2) * j)] + density[((i+1)+ (n+2) * j)] + density[(i) + (n+2) * (j-1) ]+ density[(i) + (n+2) *(j+1)])/(1+4 *a);
-                }
-            }
-          //  setBoundaries(n, b, x);
-        }
+        SetHorizontalVelocity(3.0f);
+        SetVerticalVelocity(0.1f);
     }
-    
-    public float GetDensity()
+
+
+
+    public void diffuse(float a, float c)
     {
-        return density;
+
+        float surroundingDensity = 0;
+        for (int i = 0; i < surroundingPoints.Count; i++)
+        {
+            surroundingPoints[i].SetPreviousDensity(surroundingPoints[i].density);
+            surroundingDensity += surroundingPoints[i].density;
+            if (surroundingPoints[i].density > 100.0f)
+            {
+                surroundingPoints[i].SetDensity(100.0f);
+            }
+        }
+        SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);
+
+
+    }
+  
+    public void SetMat(Material mat)
+    {
+        material = mat;
+        material.color = new Color(1.0f, 0.0f, 0.0f, 0.0f);
+      
     }
 
     public float GetPreviousDensity()
@@ -65,9 +65,9 @@ public class PointData : MonoBehaviour {
 
     public void SetDensity( float dens)
     {
-        prevDensity = dens;
+        density = dens;
+        SetDensitySource(density);
     }
-
     public void SetSource(float s)
     {
         source = s;
@@ -98,28 +98,26 @@ public class PointData : MonoBehaviour {
         horizontalVelocity = hVel;
     }
 
-    public float GetDensitySource(int i)
+    public float GetDensitySource()
     {
-        return densitySource;
+        return density;
     }
 
     public void SetDensitySource(float source)
     {
         //take the 0. to get the touch on the square
-        densitySource = source;
-       // gameObject.GetComponent<RenderTexture>().
-        //densitySources.Add(source);
-        Debug.Log("source" + source);
-        //renderTex
-
- Color colour = new Color(1.0f, 0.0f, 0.0f, (source/100.0f));
-           // //source/100.0f));
+        density = source;
+   
+        Color colour = new Color(1.0f, 0.0f, 0.0f, (source / 100.0f));
+       // Debug.Log((source /100.0f) + "source / 100");
 
         material.color = colour;
-      //  material.color.a(source / 100.0f);    }
 
-    // Update is called once per frame
+        prevDensity = density;
+        // Update is called once per frame
+    }
     void Update () {
-		
-	}
+        
+
+    }
 }
