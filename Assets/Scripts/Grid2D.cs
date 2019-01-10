@@ -52,7 +52,7 @@ public class Grid2D : MonoBehaviour {
     {
         float spacing = 12 / size;
    
-        float xValue = 0.5f;
+        float xValue = 2.0f;
         float yValue = 0.5f;
         for (int i = 0; i < size; i++)
         {
@@ -64,10 +64,11 @@ public class Grid2D : MonoBehaviour {
                 newPoint.GetComponent<PointData>().gridX = i;
                 newPoint.GetComponent<PointData>().gridY = j;
                 newPoint.GetComponent<PointData>().SetMat(mat);
+                newPoint.transform.SetParent(gameObject.transform);
 
                 xValue += spacing;
             }
-            xValue = 0.5f;
+            xValue = 2.0f;
             yValue += spacing;
         }
     }
@@ -121,7 +122,7 @@ public class Grid2D : MonoBehaviour {
     void Diffuse( int b, float diffusion)
     {
         float a = Time.deltaTime * diffusion * size * size;
-        Debug.Log(a + "a");
+      //  Debug.Log(a + "a");
         LinearSolver( b, a, 1 + 4 * a);
     }
 
@@ -254,7 +255,7 @@ public class Grid2D : MonoBehaviour {
         {
             for (int j = 0; j < size; j++)
             {
-                Debug.Log(i + " i1 " + j + " j1");
+             //   Debug.Log(i + " i1 " + j + " j1");
                 //Debug.Log(i * size)
                 float x = i - dt * points[(i * size + j)].GetVerticalVelocity();
             
@@ -265,12 +266,12 @@ public class Grid2D : MonoBehaviour {
                     x = 0.5f;
                    
                 }
-               // if (x > size + 0.5f)
-                //{
-                  //  x = size + 0.5f;
-                    
-                //}
-              
+                if (x > size + 0.5f)
+                {
+                    x = size + 0.5f;
+
+                }
+
                 int i0 = (int)x;
                 int i1 = i0 + 1;
 
@@ -279,12 +280,12 @@ public class Grid2D : MonoBehaviour {
                     y = 0.5f;
                    
                 }
-                //if (y > size + 0.5f)
-                //{
-                //    y = size + 0.5f;
-                    
-              //  }
-               
+                if (y > size + 0.5f)
+                {
+                    y = size + 0.5f;
+
+                }
+
                 int j0 = (int)y;
                 int j1 = j0 + 1;
                 float s1 = x - i0;
@@ -365,5 +366,17 @@ public class Grid2D : MonoBehaviour {
             points[i].SetDensity(0);
             points[i].SetPreviousDensity(0);
         }
+    }
+
+    public void Apply()
+    {
+        for(int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            Transform child = gameObject.transform.GetChild(i);
+            Destroy(child);
+        }
+
+        DrawGrid();
+        SetNeighbours();
     }
 }

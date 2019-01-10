@@ -26,7 +26,15 @@ public class PointData : MonoBehaviour {
         SetVerticalVelocity(0.1f);
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+      
+        Rigidbody box = other.attachedRigidbody;
 
+        //  box.AddForceAtPosition()
+        box.AddForce(new Vector3(horizontalVelocity * density, 0, verticalVelocity * density), ForceMode.Impulse);
+
+    }
 
     public void diffuse(float a, float c)
     {
@@ -36,9 +44,9 @@ public class PointData : MonoBehaviour {
         {
             surroundingPoints[i].SetPreviousDensity(surroundingPoints[i].density);
             surroundingDensity += surroundingPoints[i].density;
-            if (surroundingPoints[i].density > 100.0f)
+            if (surroundingPoints[i].density > 500.0f)
             {
-                surroundingPoints[i].SetDensity(100.0f);
+                surroundingPoints[i].SetDensity(500.0f);
             }
         }
         SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);
