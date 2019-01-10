@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1390,12 +1390,23 @@ MonoBehaviour:
   m_HandleRect: {fileID: 668084851}
   m_Direction: 0
   m_MinValue: 4
-  m_MaxValue: 20
+  m_MaxValue: 40
   m_WholeNumbers: 1
   m_Value: 4
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1625376695}
+        m_MethodName: SliderChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &1625376694
@@ -1425,9 +1436,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8dbb167d2b3194429ac458cf42c95b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 10
+  size: 18
   pointData: {fileID: 1641518450921930, guid: 3aa1295a7d6a5444883729da35311c57, type: 2}
   points: []
+  slider: {fileID: 1503740770}
+  vertVel: {fileID: 2025026971}
+  horVel: {fileID: 1150950821}
   DiffuseNodes: []
   mat: {fileID: 2100000, guid: dc5a67065164bf848932e26dc4eb1b4b, type: 2}
 --- !u!4 &1625376696
@@ -1970,7 +1984,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1625376695}
-        m_MethodName: Reset
+        m_MethodName: Apply
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

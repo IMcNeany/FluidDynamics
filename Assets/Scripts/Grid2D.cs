@@ -1,17 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Grid2D : MonoBehaviour {
-    public int size;
+    public int size = 18;
     public GameObject pointData;
     public List<PointData> points = new List<PointData>();
+    public Slider slider;
+    public InputField vertVel;
+    public InputField horVel;
+    float verticalVelocity = 0.0f;
+    float horizontalVelocity = 0.1f;
     float diffusionRate = 1.0f;
     int b = 1;
     public List<PointData> DiffuseNodes = new List<PointData>();
     public Material mat;
     int nodeCount = 0;
     bool hitOne = true;
+    int newsize;
+    float newVertVel;
+    float newHorzVel;
     // Use this for initialization
     void Start () {
         DrawGrid();
@@ -33,7 +42,7 @@ public class Grid2D : MonoBehaviour {
                     if (hit.collider.gameObject.GetComponent<PointData>())
                     {
                         PointData point = hit.collider.gameObject.GetComponent<PointData>();
-                        point.SetDensitySource(100.0f);
+                        point.SetDensitySource(300.0f);
 
                         //  Debug.Log("mouse pos" + hit.point.x + hit.point.z);
                        
@@ -50,8 +59,9 @@ public class Grid2D : MonoBehaviour {
 
     void DrawGrid()
     {
-        float spacing = 12 / size;
-   
+        float spacing = 12.0f / size;
+        Debug.Log(spacing + "spacing " + size + "size" 
+            + 12/18);
         float xValue = 2.0f;
         float yValue = 0.5f;
         for (int i = 0; i < size; i++)
@@ -64,6 +74,8 @@ public class Grid2D : MonoBehaviour {
                 newPoint.GetComponent<PointData>().gridX = i;
                 newPoint.GetComponent<PointData>().gridY = j;
                 newPoint.GetComponent<PointData>().SetMat(mat);
+                newPoint.GetComponent<PointData>().verticalVelocity = verticalVelocity;
+                newPoint.GetComponent<PointData>().horizontalVelocity = horizontalVelocity;
                 newPoint.transform.SetParent(gameObject.transform);
 
                 xValue += spacing;
@@ -121,7 +133,7 @@ public class Grid2D : MonoBehaviour {
 
     void Diffuse( int b, float diffusion)
     {
-        float a = Time.deltaTime * diffusion * size * size;
+        float a = Time.deltaTime * diffusion * size;
       //  Debug.Log(a + "a");
         LinearSolver( b, a, 1 + 4 * a);
     }
@@ -248,7 +260,7 @@ public class Grid2D : MonoBehaviour {
 
     void Advect( int b)
     {
-      
+
         float dt = Time.deltaTime * size;
         
         for (int i = 0; i < size; i++)
@@ -260,11 +272,11 @@ public class Grid2D : MonoBehaviour {
                 float x = i - dt * points[(i * size + j)].GetVerticalVelocity();
             
                 float y = j - dt * points[(i * size + j)].GetHorizontalVelocity();
-               
+
                 if (x < 0.5f)
                 {
                     x = 0.5f;
-                   
+
                 }
                 if (x > size + 0.5f)
                 {
@@ -278,7 +290,7 @@ public class Grid2D : MonoBehaviour {
                 if (y < 0.5f)
                 {
                     y = 0.5f;
-                   
+
                 }
                 if (y > size + 0.5f)
                 {
@@ -294,11 +306,11 @@ public class Grid2D : MonoBehaviour {
                 float t0 = 1 - t1;
      
 
-                if (j1 != size && i1 != size)
-                {
+               // if (j1 != size && i1 != size)
+                //{
                     
-                    points[(i * size + (j))].density = s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity())));
-                }
+                   points[(i * size + (j))].density = s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity())));
+               // }
 
                 // t0 i0 j1 top left
                 //t0 i1 j1 bottom left
@@ -308,15 +320,12 @@ public class Grid2D : MonoBehaviour {
                 //t1 i1 j1 dissapeaers
                 //t1 i0 j1 disapppeears
 
-
-                //  Debug.Log( i  + j + "i j " + i0  +j0 + " i0j0 " + i0 + j1 + " i0 j1 ");
-
-                // Debug.Log(s0 * (t0 * points[(i0 * size + (j0))].GetPreviousDensity() + t1 * points[(i0 * size + (j1))].GetPreviousDensity()) +  s1 * (t0 * points[(i1 * size + (j0))].GetPreviousDensity() + t1 * points[(i1 * size + (j1))].GetPreviousDensity()));
-                // Debug.Log("sdvent desnity" + points[(i + (size + 2) * (j))].density);
+           
             }
            
         }
         //SetBoundaryDensity(b);
+        project();
     }
 
     void Swap(float i, float j)
@@ -338,13 +347,6 @@ public class Grid2D : MonoBehaviour {
             points[(i + (size + 2) * (j))].previousHorizontalVelocity = 0;
         }
     }
-
-    SetBoundaryPreviousVerticalVelocity( 0);
-    SetBoundaryPreviousHorizontalVelocity(0);
-        //p = prev h vel
-        //div = prec v vel
-    //LinearSolver(N, 0, p, div, 1, 4);
-
     for (int i = 1; i <= size; i++)
     {
         for (int j = 1; j <= size; j++)
@@ -354,8 +356,20 @@ public class Grid2D : MonoBehaviour {
         }
     }
 
-        SetBoundaryHorizontalVelocity(1);
-        SetBoundaryVerticalVelocity(2);
+    }
+
+    public void SliderChanged()
+    {
+        newsize = (int)slider.value;
+    }
+
+    public void VertVelChanged()
+    {
+
+    }
+
+    public void HorizVelChanged()
+    {
 
     }
 
@@ -370,13 +384,26 @@ public class Grid2D : MonoBehaviour {
 
     public void Apply()
     {
+ 
         for(int i = 0; i < gameObject.transform.childCount; i++)
         {
             Transform child = gameObject.transform.GetChild(i);
-            Destroy(child);
+            Destroy(child.gameObject);
         }
+
+        points.Clear();
+
+        UpdateValues();
 
         DrawGrid();
         SetNeighbours();
+
+    }
+
+    void UpdateValues()
+    {
+        size = newsize;
+        verticalVelocity = newVertVel;
+        horizontalVelocity = newHorzVel;
     }
 }
