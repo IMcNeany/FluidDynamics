@@ -11,8 +11,8 @@ public class Grid2D : MonoBehaviour {
     public InputField vertVel;
     public InputField horVel;
     float verticalVelocity = 0.0f;
-    float horizontalVelocity = 0.1f;
-    float diffusionRate = 1.0f;
+    float horizontalVelocity = 0.0f;
+    float diffusionRate = 0.0f;
     int b = 1;
     public List<PointData> DiffuseNodes = new List<PointData>();
     public Material mat;
@@ -25,7 +25,8 @@ public class Grid2D : MonoBehaviour {
     void Start () {
         DrawGrid();
         SetNeighbours();
-       
+        slider.value = size;
+
     }
 
     // Update is called once per frame
@@ -141,7 +142,7 @@ public class Grid2D : MonoBehaviour {
     void LinearSolver(int b, float a, float c)
     {
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size-1; i++)
         {
             for (int j = 0; j < size; j++)
             {
@@ -267,20 +268,25 @@ public class Grid2D : MonoBehaviour {
         {
             for (int j = 0; j < size; j++)
             {
-             //   Debug.Log(i + " i1 " + j + " j1");
+                //   Debug.Log(i + " i1 " + j + " j1");
                 //Debug.Log(i * size)
-                float x = i - dt * points[(i * size + j)].GetVerticalVelocity();
-            
-                float y = j - dt * points[(i * size + j)].GetHorizontalVelocity();
+                //float x = i - dt * points[(i * size + j)].GetVerticalVelocity();
+
+                float x = i - points[i * size + j].GetVerticalVelocity() * dt;
+
+                // float y = j - dt * points[(i * size + j)].GetHorizontalVelocity();
+
+                float y = j - points[i * size + j].GetHorizontalVelocity() * dt;
 
                 if (x < 0.5f)
                 {
                     x = 0.5f;
 
                 }
+
                 if (x > size + 0.5f)
                 {
-                    x = size + 0.5f;
+                    x = size;
 
                 }
 
@@ -294,7 +300,7 @@ public class Grid2D : MonoBehaviour {
                 }
                 if (y > size + 0.5f)
                 {
-                    y = size + 0.5f;
+                    y = size;
 
                 }
 
@@ -308,10 +314,18 @@ public class Grid2D : MonoBehaviour {
 
                // if (j1 != size && i1 != size)
                 //{
-                    
+                if(j1 > size)
+                {
+                    j1 = 0;
+                }
+                if(i1 > size)
+                {
+                    i1 = 0;
+                }
                    points[(i * size + (j))].density = s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity())));
                // }
 
+                    
                 // t0 i0 j1 top left
                 //t0 i1 j1 bottom left
                 //t0 i1 j1 bottom left
@@ -325,8 +339,9 @@ public class Grid2D : MonoBehaviour {
            
         }
         //SetBoundaryDensity(b);
-        project();
+   
     }
+
 
     void Swap(float i, float j)
     {
@@ -365,12 +380,12 @@ public class Grid2D : MonoBehaviour {
 
     public void VertVelChanged()
     {
-
+        float newVertVel = float.Parse(vertVel.text);
     }
 
     public void HorizVelChanged()
     {
-
+        float newHorzVel = float.Parse(horVel.text);
     }
 
     public void Reset()

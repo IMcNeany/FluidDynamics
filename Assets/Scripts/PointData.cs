@@ -22,8 +22,8 @@ public class PointData : MonoBehaviour {
     void Start() {
         //need to create and assign a render texture..
         material = gameObject.GetComponent<SpriteRenderer>().material;
-        SetHorizontalVelocity(1.0f);
-        SetVerticalVelocity(0.0f);
+        SetHorizontalVelocity(-1.0f);
+        SetVerticalVelocity(1.0f);
     }
 
     private void OnTriggerStay(Collider other)
@@ -32,7 +32,7 @@ public class PointData : MonoBehaviour {
         Rigidbody box = other.attachedRigidbody;
 
         //  box.AddForceAtPosition()
-        box.AddForce(new Vector3(horizontalVelocity * density, 0, verticalVelocity * density), ForceMode.Impulse);
+        box.AddForce(new Vector3(horizontalVelocity * density/10, 0, verticalVelocity * density /10), ForceMode.Impulse);
 
     }
 
@@ -51,6 +51,8 @@ public class PointData : MonoBehaviour {
         }
         //SetPreviousDensity( density);
         SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);
+
+        //diff density, differet colours
 
 
     }
