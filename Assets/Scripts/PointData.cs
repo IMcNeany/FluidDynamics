@@ -7,10 +7,10 @@ public class PointData : MonoBehaviour {
     public float density = 0.0f;
     public float source = 0.0f;
     float prevDensity = 0.0f;
-    public float verticalVelocity = 0.0f;
+    public float verticalVelocity = -5.0f;
     public float previousVerticalVelocity;
     public float previousHorizontalVelocity = 0.0f;
-    public float horizontalVelocity = 0.0f;
+    public float horizontalVelocity = 2.0f;
     public float densitySource = 0.0f;
     public int gridX;
     public int gridY;
@@ -22,8 +22,8 @@ public class PointData : MonoBehaviour {
     void Start() {
         //need to create and assign a render texture..
         material = gameObject.GetComponent<SpriteRenderer>().material;
-        SetHorizontalVelocity(-1.0f);
-        SetVerticalVelocity(1.0f);
+        SetHorizontalVelocity(horizontalVelocity);
+        SetVerticalVelocity(verticalVelocity);
     }
 
     private void OnTriggerStay(Collider other)
@@ -32,7 +32,7 @@ public class PointData : MonoBehaviour {
         Rigidbody box = other.attachedRigidbody;
 
         //  box.AddForceAtPosition()
-        box.AddForce(new Vector3(horizontalVelocity * density/10, 0, verticalVelocity * density /10), ForceMode.Impulse);
+        box.AddForce(new Vector3(horizontalVelocity * density/10, 0, verticalVelocity * density /100), ForceMode.Impulse);
 
     }
 
@@ -106,6 +106,7 @@ public class PointData : MonoBehaviour {
 
     public void SetHorizontalVelocity( float hVel)
     {
+        Debug.Log(hVel + "hvel set");
         horizontalVelocity = hVel;
     }
 
@@ -119,7 +120,7 @@ public class PointData : MonoBehaviour {
         //take the 0. to get the touch on the square
         density = source;
    
-        Color colour = new Color(1.0f, 0.0f, 0.0f, (source / 100.0f));
+        Color colour = new Color(1.0f, 0.0f, 0.0f, (source / 50.0f));
        // Debug.Log((source /100.0f) + "source / 100");
 
         material.color = colour;

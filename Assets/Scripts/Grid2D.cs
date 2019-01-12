@@ -10,6 +10,7 @@ public class Grid2D : MonoBehaviour {
     public Slider slider;
     public InputField vertVel;
     public InputField horVel;
+    public GameObject cube;
     float verticalVelocity = 0.0f;
     float horizontalVelocity = 0.0f;
     float diffusionRate = 0.0f;
@@ -56,6 +57,7 @@ public class Grid2D : MonoBehaviour {
         }
 
         Diffuse(b, diffusionRate);
+    
     }
 
     void DrawGrid()
@@ -75,8 +77,9 @@ public class Grid2D : MonoBehaviour {
                 newPoint.GetComponent<PointData>().gridX = i;
                 newPoint.GetComponent<PointData>().gridY = j;
                 newPoint.GetComponent<PointData>().SetMat(mat);
-                newPoint.GetComponent<PointData>().verticalVelocity = verticalVelocity;
-                newPoint.GetComponent<PointData>().horizontalVelocity = horizontalVelocity;
+                Debug.Log(horizontalVelocity + "h");
+                newPoint.GetComponent<PointData>().SetHorizontalVelocity(horizontalVelocity);
+                newPoint.GetComponent<PointData>().SetVerticalVelocity(verticalVelocity);
                 newPoint.transform.SetParent(gameObject.transform);
 
                 xValue += spacing;
@@ -322,7 +325,7 @@ public class Grid2D : MonoBehaviour {
                 {
                     i1 = 0;
                 }
-                   points[(i * size + (j))].density = s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity())));
+                   points[(i * size + (j))].SetDensity( s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity()))));
                // }
 
                     
@@ -380,16 +383,18 @@ public class Grid2D : MonoBehaviour {
 
     public void VertVelChanged()
     {
-        float newVertVel = float.Parse(vertVel.text);
+        newVertVel = float.Parse(vertVel.text);
     }
 
     public void HorizVelChanged()
     {
-        float newHorzVel = float.Parse(horVel.text);
+         newHorzVel = float.Parse(horVel.text);
+        Debug.Log("changed horz" + newHorzVel);
     }
 
     public void Reset()
     {
+        cube.transform.position = new Vector3(7, 0, 5);
         for( int i =0; i < points.Count; i++)
         {
             points[i].SetDensity(0);
@@ -420,5 +425,6 @@ public class Grid2D : MonoBehaviour {
         size = newsize;
         verticalVelocity = newVertVel;
         horizontalVelocity = newHorzVel;
+        Debug.Log("changed horz" + newHorzVel + "horz" + horizontalVelocity);
     }
 }
