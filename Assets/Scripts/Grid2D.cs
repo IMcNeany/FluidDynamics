@@ -77,7 +77,7 @@ public class Grid2D : MonoBehaviour {
                 newPoint.GetComponent<PointData>().gridX = i;
                 newPoint.GetComponent<PointData>().gridY = j;
                 newPoint.GetComponent<PointData>().SetMat(mat);
-                Debug.Log(horizontalVelocity + "h");
+             //   Debug.Log(horizontalVelocity + "h");
                 newPoint.GetComponent<PointData>().SetHorizontalVelocity(horizontalVelocity);
                 newPoint.GetComponent<PointData>().SetVerticalVelocity(verticalVelocity);
                 newPoint.transform.SetParent(gameObject.transform);
@@ -315,8 +315,7 @@ public class Grid2D : MonoBehaviour {
                 float t0 = 1 - t1;
      
 
-               // if (j1 != size && i1 != size)
-                //{
+              
                 if(j1 > size)
                 {
                     j1 = 0;
@@ -325,8 +324,9 @@ public class Grid2D : MonoBehaviour {
                 {
                     i1 = 0;
                 }
-                   points[(i * size + (j))].SetDensity( s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity()))));
-               // }
+                   points[(i * size + (j))].SetDensity( s0 * ((t0 * points[(i0 * size + (j0))].GetPreviousDensity()) + 
+                       (t1 * points[(i0 * size + (j1))].GetPreviousDensity()) + s1 * ((t0 * points[(i1 * size + (j0))].GetPreviousDensity()) + (t1 * points[(i1 * size + (j1))].GetPreviousDensity()))));
+            
 
                     
                 // t0 i0 j1 top left
@@ -341,7 +341,7 @@ public class Grid2D : MonoBehaviour {
             }
            
         }
-        //SetBoundaryDensity(b);
+       
    
     }
 
@@ -394,12 +394,13 @@ public class Grid2D : MonoBehaviour {
 
     public void Reset()
     {
-        cube.transform.position = new Vector3(7, 0, 5);
+       
         for( int i =0; i < points.Count; i++)
         {
             points[i].SetDensity(0);
             points[i].SetPreviousDensity(0);
         }
+        cube.transform.position = new Vector3(7, 0, 5);
     }
 
     public void Apply()
