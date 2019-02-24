@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PointData : MonoBehaviour {
 
-    public float density = 0.0f;
+    public float density = 1.0f;
     public float source = 0.0f;
     float prevDensity = 0.0f;
     public float verticalVelocity = -5.0f;
@@ -14,7 +14,7 @@ public class PointData : MonoBehaviour {
     public float densitySource = 0.0f;
     public int gridX;
     public int gridY;
-    float diffusion;
+    public float diffusion;
     Material material;
     public List<PointData> surroundingPoints = new List<PointData>();
     public List<PointData> pointsToDiffuse = new List<PointData>();
@@ -39,24 +39,80 @@ public class PointData : MonoBehaviour {
     public void diffuse(float a, float c)
     {
 
-        float surroundingDensity = 0;
-        for (int i = 0; i < surroundingPoints.Count; i++)
+        /*  float surroundingDensity = 0;
+          for (int i = 0; i < surroundingPoints.Count; i++)
+          {
+              surroundingPoints[i].SetPreviousDensity(surroundingPoints[i].density);
+              surroundingDensity += surroundingPoints[i].density;
+              if (surroundingPoints[i].density > 300.0f)
+              {
+                  surroundingPoints[i].SetDensity(300.0f);
+              }
+          }
+          //SetPreviousDensity( density);
+          SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);
+
+          //diff density, differet colours*/
+
+        if (surroundingPoints.Count == 2)
         {
-            surroundingPoints[i].SetPreviousDensity(surroundingPoints[i].density);
-            surroundingDensity += surroundingPoints[i].density;
-            if (surroundingPoints[i].density > 300.0f)
-            {
-                surroundingPoints[i].SetDensity(300.0f);
-            }
+            SetDensity((GetPreviousDensity() + a * surroundingPoints[0].density + surroundingPoints[1].density) / c);
         }
-        //SetPreviousDensity( density);
-        SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);
 
-        //diff density, differet colours
+        if (surroundingPoints.Count == 3)
+        {
+            SetDensity((GetPreviousDensity() + a * surroundingPoints[0].density + surroundingPoints[1].density + surroundingPoints[2].density) / c);
+        }
 
+        if (surroundingPoints.Count == 4)
+        {
+            SetDensity((GetPreviousDensity() + a * surroundingPoints[0].density + surroundingPoints[1].density + surroundingPoints[2].density + surroundingPoints[3].density) / c);
+        }
 
     }
   
+    public void Advect(int i, float size)
+    {
+        float dt0 = Time.deltaTime * size;
+        for (int j =0; j < size; j++)
+        {
+            float x = i - dt0 * GetHorizontalVelocity();
+            float y = j - dt0 * GetVerticalVelocity();
+
+
+            if (x < 0.5f)
+            {
+                x = 0.5f;
+            }
+            if (x > size + 0.5f)
+            {
+                x = size + 0.5f;
+            }
+            int i0 = (int)x;
+            int i1 = i0 + 1;
+            if (y < 0.5f)
+            {
+                y = 0.5f;
+            }
+            if (y > size + 0.5f)
+            {
+                y = size + 0.5f;
+            }
+            int j0 = (int)y;
+            int j1 = j0 + 1;
+            float s1 = x - i0;
+            float s0 = 1 - s1;
+            float t1 = y - j0;
+            float t0 = 1 - t1;
+
+          
+               //    SetDensity(s0 * (t0 * GetPreviousDensity() + t1 * surroundingPoints[0].GetPreviousDensity()) 
+                 //      + s1 * (t0 * surroundingPoints[1].GetPreviousDensity() + t1 * surroundingPoints[2].GetPreviousDensity()));
+          
+        }
+
+
+    }
     public void SetMat(Material mat)
     {
         material = mat;
@@ -101,13 +157,15 @@ public class PointData : MonoBehaviour {
 
     public void SetVerticalVelocity( float vVel)
     {
+        previousVerticalVelocity = verticalVelocity;
         verticalVelocity = vVel;
         SetVelocityTextureDir();
     }
 
     public void SetHorizontalVelocity( float hVel)
     {
-     //   Debug.Log(hVel + "hvel set");
+        //   Debug.Log(hVel + "hvel set");
+        previousHorizontalVelocity = horizontalVelocity;
         horizontalVelocity = hVel;
         SetVelocityTextureDir();
 
@@ -116,7 +174,7 @@ public class PointData : MonoBehaviour {
 
    void SetVelocityTextureDir()
     {
-        Transform child = gameObject.transform.GetChild(0);
+    /*    Transform child = gameObject.transform.GetChild(0);
 
         float dir = 0;
     
@@ -175,7 +233,7 @@ public class PointData : MonoBehaviour {
             dir += additionalDir;
         }
         Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, dir);
-        child.transform.localRotation = rotation;
+        child.transform.localRotation = rotation;*/
     }
 
     public float GetDensitySource()
