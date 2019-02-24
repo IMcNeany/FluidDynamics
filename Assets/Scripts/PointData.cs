@@ -70,7 +70,45 @@ public class PointData : MonoBehaviour {
         }
 
     }
-  
+
+   public void DiffuseHorizontalVelocity(float a, float c)
+    {
+
+        if (surroundingPoints.Count == 2)
+        {
+            SetHorizontalVelocity((previousHorizontalVelocity + a * surroundingPoints[0].GetHorizontalVelocity() + surroundingPoints[1].GetHorizontalVelocity()) / c);
+        }
+
+        if (surroundingPoints.Count == 3)
+        {
+            SetHorizontalVelocity((previousHorizontalVelocity + a * surroundingPoints[0].GetHorizontalVelocity() + surroundingPoints[1].GetHorizontalVelocity() + surroundingPoints[2].GetHorizontalVelocity()) / c);
+        }
+
+        if (surroundingPoints.Count == 4)
+        {
+            SetHorizontalVelocity((previousHorizontalVelocity + a * surroundingPoints[0].GetHorizontalVelocity() + surroundingPoints[1].GetHorizontalVelocity() + surroundingPoints[2].GetHorizontalVelocity() + surroundingPoints[3].GetHorizontalVelocity()) / c);
+        }
+    }
+
+    public void DiffuseVerticalVelocity(float a, float c)
+    {
+        if (surroundingPoints.Count == 2)
+        {
+            SetVerticalVelocity((previousVerticalVelocity + a * surroundingPoints[0].GetVerticalVelocity() + surroundingPoints[1].GetVerticalVelocity()) / c);
+        }
+
+        if (surroundingPoints.Count == 3)
+        {
+            SetVerticalVelocity((previousVerticalVelocity + a * surroundingPoints[0].GetVerticalVelocity() + surroundingPoints[1].GetVerticalVelocity() + surroundingPoints[2].GetVerticalVelocity()) / c);
+        }
+
+        if (surroundingPoints.Count == 4)
+        {
+            SetVerticalVelocity((previousVerticalVelocity + a * surroundingPoints[0].GetVerticalVelocity() + surroundingPoints[1].GetVerticalVelocity() + surroundingPoints[2].GetVerticalVelocity() + surroundingPoints[3].GetVerticalVelocity()) / c);
+        }
+    }
+
+
     public void Advect(int i, float size)
     {
         float dt0 = Time.deltaTime * size;
@@ -168,7 +206,6 @@ public class PointData : MonoBehaviour {
         previousHorizontalVelocity = horizontalVelocity;
         horizontalVelocity = hVel;
         SetVelocityTextureDir();
-
 
     }
 

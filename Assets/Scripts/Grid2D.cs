@@ -14,6 +14,7 @@ public class Grid2D : MonoBehaviour {
     float verticalVelocity = 0.0f;
     float horizontalVelocity = 0.0f;
     float diffusionRate = 0.2f;
+    float viscosity = 0.2f;
     public List<PointData> DiffuseNodes = new List<PointData>();
     public Material mat;
     int nodeCount = 0;
@@ -85,16 +86,7 @@ public class Grid2D : MonoBehaviour {
             {
                 points[i].diffuse(a, c);
             }
-         /*   for (int i = 1; i <= size; i++)
-            {
-                for (int j = 1; j <= size; j++)
-                {
-                    points[(i) + (size + 2) * (j)].SetDensity((points[(i) + (size + 2) * (j)].GetPreviousDensity() + a * (points[(i - 1) + (size + 2) * (j)].density
-                        + points[(i + 1) + (size + 2) * (j)].density + points[(i) + (size + 2) * (j - 1)].density + points[(i) + (size + 2) * (j + 1)].density) / c));
-                    Debug.Log(i +j *((i + 1) + (size + 2) * (j + 1)) + " point ");
-                }
-                
-            }*/
+       
         }
     }
 
@@ -202,6 +194,92 @@ public class Grid2D : MonoBehaviour {
         }
 
         DensityStep();
+    }
+
+
+    void AddVeclocitySource()
+    {
+        // int densSize = (size) + (size);
+        //poss denssize but idkk
+        for (int i = 0; i < points.Count; i++)
+        {
+            points[i].SetHorizontalVelocity(points[i].horizontalVelocity += Time.deltaTime * points[i].previousHorizontalVelocity);
+            points[i].SetVerticalVelocity(points[i].verticalVelocity += Time.deltaTime * points[i].previousVerticalVelocity);
+        }
+    }
+
+    void SwapHorizontalVelocity()
+    {
+        for (int i = 0; i < points.Count; i++)
+        {
+            float tmp = points[i].previousHorizontalVelocity;
+            points[i].previousHorizontalVelocity = (points[i].horizontalVelocity);
+            points[i].SetHorizontalVelocity(tmp);
+        }
+    }
+    void SwapHVerticalVelocity()
+    {
+        for (int i = 0; i < points.Count; i++)
+        {
+            float tmp = points[i].previousVerticalVelocity;
+            points[i].previousVerticalVelocity = (points[i].verticalVelocity);
+            points[i].SetVerticalVelocity(tmp);
+        }
+    }
+
+    void DiffuseHorizontalVelocity()
+    {
+        float a = Time.deltaTime * viscosity * size * size;
+        HorizontalVelocityLinearSolver(a, 1 + 4 * a);
+    }
+
+    void HorizontalVelocityLinearSolver(float a, float c)
+    {
+        for (int k = 0; k < 20; k++)
+        {
+            //for size of points linear solve
+            for (int i = 0; i < size; i++)
+            {
+                points[i].DiffuseHorizontalVelocity(a, c);
+            }
+
+        }
+    }
+
+    void DiffuseVerticalVelocity()
+    {
+        float a = Time.deltaTime * viscosity * size * size;
+        VerticalVelocityLinearSolver(a, 1 + 4 * a);
+    }
+
+    void VerticalVelocityLinearSolver(float a, float c)
+    {
+        for (int k = 0; k < 20; k++)
+        {
+            //for size of points linear solve
+            for (int i = 0; i < size; i++)
+            {
+                points[i].DiffuseVerticalVelocity(a, c);
+            }
+
+        }
+    }
+
+    void ProjectVelocity()
+    {
+        int i, j;
+
+        //FOR_EACH_CELL
+    //        div[IX(i, j)] = -0.5f * (u[IX(i + 1, j)] - u[IX(i - 1, j)] + v[IX(i, j + 1)] - v[IX(i, j - 1)]) / N;
+     //   p[IX(i, j)] = 0;
+//        END_FOR
+
+     //   lin_solve(N, 0, p, div, 1, 4);
+
+//        FOR_EACH_CELL
+  //          u[IX(i, j)] -= 0.5f * N * (p[IX(i + 1, j)] - p[IX(i - 1, j)]);
+   //     v[IX(i, j)] -= 0.5f * N * (p[IX(i, j + 1)] - p[IX(i, j - 1)]);
+    //    END_FOR
     }
 
     void DrawGrid()
