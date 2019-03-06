@@ -1529,7 +1529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8dbb167d2b3194429ac458cf42c95b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 18
+  size: 4
   pointData: {fileID: 1641518450921930, guid: 3aa1295a7d6a5444883729da35311c57, type: 2}
   points: []
   slider: {fileID: 1503740770}
