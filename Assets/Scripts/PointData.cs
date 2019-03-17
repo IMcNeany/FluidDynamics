@@ -32,14 +32,15 @@ public class PointData : MonoBehaviour {
         Rigidbody box = other.attachedRigidbody;
 
         //  box.AddForceAtPosition()
-        box.AddForce(new Vector3(horizontalVelocity * density/10, 0, verticalVelocity * density /100), ForceMode.Impulse);
+        box.AddForce(new Vector3(horizontalVelocity * density/100, 0, verticalVelocity * density/100 ), ForceMode.Impulse);
+      // box.AddRelativeForce(new Vector3())
 
     }
 
     public void diffuse(float a, float c)
     {
 
-          float surroundingDensity = 0;
+         /* float surroundingDensity = 0;
           for (int i = 0; i < surroundingPoints.Count; i++)
           {
               //surroundingPoints[i].SetPreviousDensity(surroundingPoints[i].density);
@@ -47,10 +48,11 @@ public class PointData : MonoBehaviour {
               if (surroundingPoints[i].density > 300.0f)
               {
                   surroundingPoints[i].SetDensity(300.0f);
+                Debug.Log("max density set for point" + i);
               }
           }
     
-          SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);
+          SetDensity(GetPreviousDensity() + a * (surroundingDensity) / c);*/
 
           //diff density, differet colours*/
 
@@ -239,7 +241,12 @@ public class PointData : MonoBehaviour {
     {
         //take the 0. to get the touch on the square
         density = source;
-   
+
+        if (source < 0)
+        {
+            density = 0;
+        }
+
         Color colour = new Color(1.0f, 0.0f, 0.0f, (source/50));
        // Debug.Log((source /100.0f) + "source / 100");
 
