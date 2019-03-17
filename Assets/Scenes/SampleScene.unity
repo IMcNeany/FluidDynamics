@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1529,7 +1529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8dbb167d2b3194429ac458cf42c95b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 4
+  size: 8
   pointData: {fileID: 1641518450921930, guid: 3aa1295a7d6a5444883729da35311c57, type: 2}
   points: []
   slider: {fileID: 1503740770}

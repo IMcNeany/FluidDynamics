@@ -127,8 +127,8 @@ public class Grid2D : MonoBehaviour {
             {
 
 
-                float x = i - dt0 * points[i].GetHorizontalVelocity();
-                float y = k - dt0 * points[i].GetVerticalVelocity();
+                float x = i - dt0 * points[k].GetHorizontalVelocity();
+                float y = k - dt0 * points[k].GetVerticalVelocity();
 
                    if (x < 0.5f)
                     {
@@ -248,7 +248,7 @@ public class Grid2D : MonoBehaviour {
         //poss denssize but idkk
         for (int i = 0; i < points.Count; i++)
         {
-            points[i].SetHorizontalVelocity(points[i].horizontalVelocity+= Time.deltaTime * points[i].previousHorizontalVelocity);
+            points[i].SetHorizontalVelocity(points[i].horizontalVelocity += Time.deltaTime * points[i].previousHorizontalVelocity);
             points[i].SetVerticalVelocity(points[i].verticalVelocity += Time.deltaTime * points[i].previousVerticalVelocity);
         }
     }

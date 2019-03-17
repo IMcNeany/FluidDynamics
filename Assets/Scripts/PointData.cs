@@ -154,16 +154,19 @@ public class PointData : MonoBehaviour {
 
     public void SetVerticalVelocity( float vVel)
     {
-        previousVerticalVelocity = verticalVelocity;
+       // previousVerticalVelocity = verticalVelocity;
         verticalVelocity = vVel;
+
+      
         SetVelocityTextureDir();
     }
 
     public void SetHorizontalVelocity( float hVel)
     {
         //   Debug.Log(hVel + "hvel set");
-        previousHorizontalVelocity = horizontalVelocity;
+        //previousHorizontalVelocity = horizontalVelocity;
         horizontalVelocity = hVel;
+      
         SetVelocityTextureDir();
 
     }
@@ -173,11 +176,17 @@ public class PointData : MonoBehaviour {
        Transform child = gameObject.transform.GetChild(0);
 
         float dir = 0;
-    
-        if(verticalVelocity <0)
+        bool setRotation = true;
+        if(verticalVelocity == 0 && horizontalVelocity == 0)
         {
-           
-            if(horizontalVelocity ==0)
+            child.gameObject.SetActive(false);
+            setRotation = false;
+        }
+        else if(verticalVelocity <0)
+        {
+             setRotation = true;
+            child.gameObject.SetActive(true);
+            if (horizontalVelocity ==0)
             {
                 dir = 0;
             }
@@ -200,6 +209,8 @@ public class PointData : MonoBehaviour {
         }
         else if(horizontalVelocity < 0)
         {
+            setRotation = true;
+            child.gameObject.SetActive(true);
             if (verticalVelocity == 0)
             {
                 dir = -90;
@@ -223,13 +234,19 @@ public class PointData : MonoBehaviour {
         }
         else
         {
+            setRotation = true;
+            child.gameObject.SetActive(true);
             dir = 90;
             float percent = (verticalVelocity / horizontalVelocity);
             float additionalDir = 45 * percent;
             dir += additionalDir;
         }
-        Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, dir);
-        child.transform.localRotation = rotation;
+       
+        if(setRotation)
+        {
+            Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, dir);
+            child.transform.localRotation = rotation;
+        }
     }
 
     public float GetDensitySource()
