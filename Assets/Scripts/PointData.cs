@@ -32,7 +32,7 @@ public class PointData : MonoBehaviour {
         Rigidbody box = other.attachedRigidbody;
 
         //  box.AddForceAtPosition()
-        box.AddForce(new Vector3(horizontalVelocity * density/100, 0, verticalVelocity * density/100 ), ForceMode.Impulse);
+        box.AddForce(new Vector3(horizontalVelocity, 0, verticalVelocity), ForceMode.VelocityChange);
       // box.AddRelativeForce(new Vector3())
 
     }
@@ -155,6 +155,7 @@ public class PointData : MonoBehaviour {
     public void SetVerticalVelocity( float vVel)
     {
        // previousVerticalVelocity = verticalVelocity;
+     
         verticalVelocity = vVel;
 
       
@@ -165,6 +166,7 @@ public class PointData : MonoBehaviour {
     {
         //   Debug.Log(hVel + "hvel set");
         //previousHorizontalVelocity = horizontalVelocity;
+    
         horizontalVelocity = hVel;
       
         SetVelocityTextureDir();
