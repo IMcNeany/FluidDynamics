@@ -13,7 +13,7 @@ public class Grid2D : MonoBehaviour {
     public GameObject cube;
     float verticalVelocity = 0.0f;
     float horizontalVelocity = 0.0f;
-    float diffusionRate = 1.0f;
+    float diffusionRate = 0.5f;
     float viscosity = 0.2f;
     public List<PointData> DiffuseNodes = new List<PointData>();
     public Material mat;
@@ -236,9 +236,9 @@ public class Grid2D : MonoBehaviour {
               //  Diffuse( b, diffusionRate);
             }
         }
-
+        VelocityStep();
         DensityStep();
-       VelocityStep();
+      
     }
 
 
@@ -258,7 +258,7 @@ public class Grid2D : MonoBehaviour {
         for (int i = 0; i < points.Count; i++)
         {
             float tmp = points[i].previousHorizontalVelocity;
-            points[i].previousHorizontalVelocity = (points[i].horizontalVelocity);
+            points[i].previousHorizontalVelocity = points[i].horizontalVelocity;
             points[i].SetHorizontalVelocity(tmp);
         }
     }
@@ -267,7 +267,7 @@ public class Grid2D : MonoBehaviour {
         for (int i = 0; i < points.Count; i++)
         {
             float tmp = points[i].previousVerticalVelocity;
-            points[i].previousVerticalVelocity = (points[i].verticalVelocity);
+            points[i].previousVerticalVelocity = points[i].verticalVelocity;
             points[i].SetVerticalVelocity(tmp);
         }
     }
@@ -367,6 +367,7 @@ public class Grid2D : MonoBehaviour {
 
     void ProjectVelocity()
     {
+        float h = 1.0f / size;
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -394,10 +395,44 @@ public class Grid2D : MonoBehaviour {
                 }
 
 
-                points[(i + (size) * (j))].previousVerticalVelocity = -0.5f * (points[((k) + (size) * (j))].horizontalVelocity
+                points[(i + (size) * (j))].previousVerticalVelocity = -0.5f * h* (points[((k) + (size) * (j))].horizontalVelocity
                     - points[((l) + (size) * (j))].horizontalVelocity + points[(i + (size) * (n))].verticalVelocity - points[(i + (size) * (m))].verticalVelocity) / size;
                 points[(i + (size) * (j))].previousHorizontalVelocity = 0;
                 Debug.Log(points[(i + (size) * (j))].previousVerticalVelocity + "prev velocity" + points[(i + (size) * (j))].previousHorizontalVelocity);
+            }
+        }
+        for (int a = 0; a < 20; a++)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    int k = i + 1;
+                    int l = i - 1;
+                    int m = j - 1;
+                    int n = j + 1;
+
+                    if (l < 0)
+                    {
+                        l = i;
+                    }
+                    if (m < 0)
+                    {
+                        m = j;
+                    }
+                    if (k >= size)
+                    {
+                        k = i;
+                    }
+                    if (n >= size)
+                    {
+                        n = i;
+                    }
+
+
+                    points[(i + (size) * (j))].previousHorizontalVelocity = (points[((l) + (size) * (j))].previousVerticalVelocity
+                        + points[((k) + (size) * (j))].previousHorizontalVelocity + points[(i + (size) * (m))].previousHorizontalVelocity + points[(i + (size) * (n))].previousHorizontalVelocity) / 4;
+                }
             }
         }
 
@@ -427,8 +462,8 @@ public class Grid2D : MonoBehaviour {
                     n = i;
                 }
 
-                points[(i + (size) * (j))].SetHorizontalVelocity(points[(i + (size) * (j))].horizontalVelocity -= 0.5f * size * (points[((k) + (size) * (j))].previousHorizontalVelocity - points[((l) + (size) * (j))].previousHorizontalVelocity));
-                points[(i + (size) * (j))].SetVerticalVelocity(points[(i + (size) * (j))].verticalVelocity -= 0.5f * size * (points[(i + (size) * (n))].previousHorizontalVelocity - points[(i + (size) * (m))].previousHorizontalVelocity));
+                points[(i + (size) * (j))].SetHorizontalVelocity(points[(i + (size) * (j))].horizontalVelocity -= 0.5f * size * (points[((k) + (size) * (j))].previousHorizontalVelocity - points[((l) + (size) * (j))].previousHorizontalVelocity)/h);
+                points[(i + (size) * (j))].SetVerticalVelocity(points[(i + (size) * (j))].verticalVelocity -= 0.5f * size * (points[(i + (size) * (n))].previousHorizontalVelocity - points[(i + (size) * (m))].previousHorizontalVelocity)/h);
             }
         }
     }
